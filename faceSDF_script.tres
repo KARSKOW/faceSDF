@@ -1,0 +1,362 @@
+[gd_resource type="Shader" format=3 uid="uid://ba31w71jw1e0q"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, shadows_disabled;
+
+uniform sampler2D Texture2DParameter;
+
+// Varyings
+varying vec3 var_world_position;
+
+uniform vec4 ColorParameter : source_color;
+uniform vec4 shadow : source_color;
+uniform vec3 forward = vec3(0.000000, 0.000000, 1.000000);
+uniform vec3 right = vec3(1.000000, 0.000000, 0.000000);
+uniform sampler2D SDF;
+
+
+
+void vertex() {
+// Input:2
+	mat4 n_out2p0 = VIEW_MATRIX;
+
+
+// Input:7
+	vec3 n_out7p0 = VERTEX;
+
+
+// VectorDecompose:8
+	float n_out8p0 = vec4(n_out7p0, 0.0).x;
+	float n_out8p1 = vec4(n_out7p0, 0.0).y;
+	float n_out8p2 = vec4(n_out7p0, 0.0).z;
+	float n_out8p3 = vec4(n_out7p0, 0.0).w;
+
+
+// VectorCompose:9
+	float n_in9p3 = 1.00000;
+	vec4 n_out9p0 = vec4(n_out8p0, n_out8p1, n_out8p2, n_in9p3);
+
+
+// TransformVectorMult:6
+	vec3 n_out6p0 = (vec4(vec3(n_out9p0.xyz), 0.0) * n_out2p0).xyz;
+
+
+// VaryingSetter:5
+	var_world_position = n_out6p0;
+
+
+}
+
+void fragment() {
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Texture2DParameter, UV);
+
+
+// ColorParameter:6
+	vec4 n_out6p0 = ColorParameter;
+
+
+// VectorOp:7
+	vec3 n_out7p0 = vec3(n_out3p0.xyz) * vec3(n_out6p0.xyz);
+
+
+// BooleanConstant:2
+	bool n_out2p0 = false;
+
+
+// Output:0
+	ALBEDO = n_out7p0;
+	AO = (n_out2p0 ? 1.0 : 0.0);
+
+
+}
+
+void light() {
+// Input:252
+	float n_out252p0 = ATTENUATION;
+
+
+	vec4 n_out259p0;
+// Texture2D:259
+	n_out259p0 = texture(Texture2DParameter, UV);
+
+
+// Reroute:263
+	vec4 n_out263p0 = n_out259p0;
+
+
+// ColorParameter:267
+	vec4 n_out267p0 = shadow;
+
+
+// VectorOp:258
+	vec3 n_out258p0 = vec3(n_out259p0.xyz) * vec3(n_out267p0.xyz);
+
+
+// Input:140
+	mat4 n_out140p0 = MODEL_MATRIX;
+
+
+// Reroute:219
+	mat4 n_out219p0 = n_out140p0;
+
+
+// Reroute:218
+	mat4 n_out218p0 = n_out219p0;
+
+
+// Vector3Parameter:39
+	vec3 n_out39p0 = forward;
+
+
+// TransformVectorMult:139
+	vec3 n_out139p0 = (n_out218p0 * vec4(n_out39p0, 0.0)).xyz;
+
+
+// VectorDecompose:44
+	float n_out44p0 = n_out139p0.x;
+	float n_out44p1 = n_out139p0.y;
+	float n_out44p2 = n_out139p0.z;
+
+
+// VectorCompose:43
+	vec2 n_out43p0 = vec2(n_out44p0, n_out44p2);
+
+
+// VectorFunc:49
+	vec3 n_out49p0 = normalize(vec3(n_out43p0, 0.0));
+
+
+// Input:145
+	mat4 n_out145p0 = VIEW_MATRIX;
+
+
+// Input:41
+	vec3 n_out41p0 = LIGHT;
+
+
+// TransformVectorMult:292
+	vec3 n_out292p0 = (vec4(n_out41p0, 0.0) * n_out145p0).xyz;
+
+
+// VectorDecompose:74
+	float n_out74p0 = n_out292p0.x;
+	float n_out74p1 = n_out292p0.y;
+	float n_out74p2 = n_out292p0.z;
+
+
+// VectorCompose:75
+	vec2 n_out75p0 = vec2(n_out74p0, n_out74p2);
+
+
+// VectorFunc:73
+	vec3 n_out73p0 = normalize(vec3(n_out75p0, 0.0));
+
+
+// DotProduct:76
+	float n_out76p0 = dot(n_out49p0, n_out73p0);
+
+
+// Step:94
+	float n_in94p0 = 0.00000;
+	float n_out94p0 = step(n_in94p0, n_out76p0);
+
+
+// Reroute:221
+	mat4 n_out221p0 = n_out140p0;
+
+
+// Reroute:220
+	mat4 n_out220p0 = n_out221p0;
+
+
+// Vector3Parameter:40
+	vec3 n_out40p0 = right;
+
+
+// TransformVectorMult:141
+	vec3 n_out141p0 = (n_out220p0 * vec4(n_out40p0, 0.0)).xyz;
+
+
+// VectorDecompose:46
+	float n_out46p0 = n_out141p0.x;
+	float n_out46p1 = n_out141p0.y;
+	float n_out46p2 = n_out141p0.z;
+
+
+// VectorCompose:45
+	vec2 n_out45p0 = vec2(n_out46p0, n_out46p2);
+
+
+// VectorFunc:50
+	vec3 n_out50p0 = normalize(vec3(n_out45p0, 0.0));
+
+
+// DotProduct:77
+	float n_out77p0 = dot(n_out50p0, n_out73p0);
+
+
+// VectorCompose:78
+	float n_in78p1 = 0.00000;
+	vec2 n_out78p0 = vec2(n_out77p0, n_in78p1);
+
+
+// Reroute:99
+	vec2 n_out99p0 = n_out78p0;
+
+
+// Reroute:98
+	vec2 n_out98p0 = n_out99p0;
+
+
+// FloatFunc:80
+	float n_out80p0 = acos(n_out78p0.x);
+
+
+// FloatConstant:296
+	float n_out296p0 = 3.141590;
+
+
+// FloatOp:103
+	float n_out103p0 = n_out80p0 / n_out296p0;
+
+
+// FloatOp:104
+	float n_in104p1 = 2.00000;
+	float n_out104p0 = n_out103p0 * n_in104p1;
+
+
+// FloatFunc:84
+	float n_out84p0 = 1.0 - n_out104p0;
+
+
+// FloatOp:85
+	float n_in85p1 = 1.00000;
+	float n_out85p0 = n_out104p0 - n_in85p1;
+
+
+	vec3 n_out113p0;
+// If:113
+	float n_in113p1 = 0.00000;
+	float n_in113p2 = 0.00001;
+	vec3 n_in113p3 = vec3(0.00000, 0.00000, 0.00000);
+	if(abs(n_out98p0.x - n_in113p1) < n_in113p2)
+	{
+		n_out113p0 = n_in113p3;
+	}
+	else if(n_out98p0.x < n_in113p1)
+	{
+		n_out113p0 = vec3(n_out85p0);
+	}
+	else
+	{
+		n_out113p0 = vec3(n_out84p0);
+	}
+
+
+// Reroute:100
+	vec2 n_out100p0 = n_out78p0;
+
+
+// Reroute:101
+	vec2 n_out101p0 = n_out100p0;
+
+
+// Input:57
+	vec2 n_out57p0 = UV;
+
+
+// VectorDecompose:68
+	float n_out68p0 = n_out57p0.x;
+	float n_out68p1 = n_out57p0.y;
+
+
+// FloatFunc:69
+	float n_out69p0 = 1.0 - n_out68p0;
+
+
+// VectorCompose:70
+	vec2 n_out70p0 = vec2(n_out69p0, n_out68p1);
+
+
+	vec4 n_out54p0;
+// Texture2D:54
+	n_out54p0 = texture(SDF, n_out70p0);
+	float n_out54p1 = n_out54p0.r;
+
+
+	vec4 n_out71p0;
+// Texture2D:71
+	n_out71p0 = texture(SDF, n_out57p0);
+	float n_out71p1 = n_out71p0.r;
+
+
+	vec3 n_out114p0;
+// If:114
+	float n_in114p1 = 0.00000;
+	float n_in114p2 = 0.00000;
+	vec3 n_in114p3 = vec3(0.00000, 0.00000, 0.00000);
+	if(abs(n_out101p0.x - n_in114p1) < n_in114p2)
+	{
+		n_out114p0 = n_in114p3;
+	}
+	else if(n_out101p0.x < n_in114p1)
+	{
+		n_out114p0 = vec3(n_out71p1);
+	}
+	else
+	{
+		n_out114p0 = vec3(n_out54p1);
+	}
+
+
+// Step:91
+	vec3 n_out91p0 = step(n_out113p0, n_out114p0);
+
+
+// VectorOp:96
+	vec3 n_out96p0 = vec3(n_out94p0) * n_out91p0;
+
+
+// VectorFunc:262
+	vec3 n_out262p0 = vec3(1.0) - n_out96p0;
+
+
+// Mix:261
+	vec3 n_out261p0 = mix(vec3(n_out263p0.xyz), n_out258p0, n_out262p0);
+
+
+// VectorOp:277
+	vec3 n_out277p0 = vec3(n_out252p0) * n_out261p0;
+
+
+// Input:280
+	vec3 n_out280p0 = LIGHT_COLOR;
+
+
+// VectorOp:279
+	vec3 n_out279p0 = n_out277p0 * n_out280p0;
+
+
+// Clamp:276
+	vec3 n_in276p1 = vec3(0.00000, 0.00000, 0.00000);
+	vec3 n_in276p2 = vec3(1.00000, 1.00000, 1.00000);
+	vec3 n_out276p0 = clamp(n_out279p0, n_in276p1, n_in276p2);
+
+
+// Input:270
+	vec3 n_out270p0 = DIFFUSE_LIGHT;
+
+
+// VectorOp:269
+	vec3 n_out269p0 = n_out276p0 + n_out270p0;
+
+
+// Output:0
+	DIFFUSE_LIGHT = n_out269p0;
+
+
+}
+"
