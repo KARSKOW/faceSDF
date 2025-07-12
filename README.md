@@ -42,9 +42,9 @@ func physics_process(delta):
 ```
 
 ## 着色器参数
-`Base Texture` 彩色底图，即模型原来绘画的颜色
-`Color` 颜色，混合彩色底图
-`Shadow` 阴影颜色
-`Forward` 向前向量，用于对准向前坐标，通常是 z = 1.0。
-`Right` 向右向量，用于对准向右坐标，通常是 x = 1.0。
-`SDF` SDF贴图，必须由自己在模型绘画并生成。
+<br>`Base Texture` 彩色底图，即模型原来绘画的颜色
+<br>`Color` 颜色，混合彩色底图
+<br>`Shadow` 阴影颜色
+<br>`Forward` 向前向量，用于对准向前坐标，通常是 z = 1.0。
+<br>`Right` 向右向量，用于对准向右坐标，通常是 x = 1.0。
+<br>`SDF` SDF贴图，必须由自己在模型绘画并生成。
