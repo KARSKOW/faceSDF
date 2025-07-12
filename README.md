@@ -29,9 +29,11 @@
 <br>1.需要一个SDF图片和模型的颜色图片。
 <br>2.需要一个专门处理脸部的材质槽，并且带UV。
 <br>3.为了阴影精准投射，需要加入以下代码：
-<br>（physics_process(delta)）
+```gdscript
+<br>func physics_process(delta):
 <br>	body_mesh.get_surface_override_material(0).set("shader_parameter/forward", Vector3.FORWARD *  <br>self.transform.origin)
 <br>	body_mesh.get_surface_override_material(0).set("shader_parameter/right", Vector3.RIGHT * <br>self.transform.origin)
+```
 <br>    建议添加Marker3D以对准向量。
 <br>4.如果出现阴影从相反的方向投射，请直接用减法反转，例如：
 <br>    Vector3.RIGHT * -self.transform.origin
