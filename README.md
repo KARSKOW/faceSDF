@@ -38,9 +38,9 @@ Mipmap --> 生成 = false（关闭）
 <br>4.为了阴影精准投射，需要加入以下代码：
 ```gdscript
 func physics_process(delta):
-		body_mesh.get_surface_override_material(0).set("shader_parameter/forward", Vector3.FORWARD *  self.transform.origin)
-		body_mesh.get_surface_override_material(0).set("shader_parameter/right", Vector3.RIGHT * self.transform.origin)		
-* 建议添加Marker3D以辅助对准向量。
+	body_mesh.get_surface_override_material(0).set("shader_parameter/forward", abs(Vector3.FORWARD *  self.transform.origin))
+	body_mesh.get_surface_override_material(0).set("shader_parameter/right", Vector3.RIGHT * self.transform.origin)
+# 建议添加Marker3D以辅助对准向量。
 ```
 <br>5.如果出现阴影从相反的方向投射，请直接用减法反转，例如：
 ```
