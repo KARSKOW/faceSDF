@@ -17,8 +17,8 @@
 <br>尽管如此，这个着色器仍然有许多问题。
 
 ## 问题
-<br>1.点光的阴影方向可能不太准确。
-<br>2.目前暂无办法将阴影边缘平滑处理，可能需要更多的研究。
+<br>1.点光的阴影方向可能不太准确。（也有可能是准确的，需要反馈。）
+<br>2.目前暂无办法将阴影边缘平滑处理。
 <br>3.阴影的过渡速度稍快。
 <br>提示：如果必须应用到你的游戏项目，请仔细阅读该着色器目前遇到的问题。
 
@@ -39,6 +39,7 @@ Mipmap --> 生成 = false（关闭）
 ```gdscript
 func physics_process(delta):
 	body_mesh.get_surface_override_material(0).set("shader_parameter/forward", abs(Vector3.FORWARD *  self.transform.origin))
+	
 	body_mesh.get_surface_override_material(0).set("shader_parameter/right", Vector3.RIGHT * self.transform.origin)
 # 建议添加Marker3D以辅助对准向量。
 ```
